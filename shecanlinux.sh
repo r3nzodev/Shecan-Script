@@ -72,8 +72,8 @@ case $user_choice in
         echo "Only the token part (not the full URL)"
         echo ""
         echo "Example:"
-        echo "If your URL is: https://ddns.shecan.ir/update?password=bfdf57e92c9d6"
-        echo "Then enter only: bfdf57e92c9d6"
+        echo "If your URL is: https://ddns.shecan.ir/update?password=bfdf57e82c9d6"
+        echo "Then enter only: bfdf57e82c9d6"
         echo ""
         read -p "Password Token: " ddns_password
         
