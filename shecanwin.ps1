@@ -1,7 +1,6 @@
 # Shecan DNS Manager - Windows Installer
 # Run once as Administrator
 
-# Check admin privileges
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "Error: Please run PowerShell as Administrator" -ForegroundColor Red
     exit 1
@@ -10,13 +9,11 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 Write-Host "Shecan DNS Manager - Windows Setup"
 Write-Host "=================================="
 
-# Create program directory
 $installPath = "$env:ProgramFiles\Shecan"
 if (-not (Test-Path $installPath)) {
     New-Item -ItemType Directory -Path $installPath -Force | Out-Null
 }
 
-# Plan selection
 Write-Host ""
 Write-Host "Select your Shecan plan:"
 Write-Host "1) FREE User (178.22.122.100, 185.51.200.2)"
@@ -39,7 +36,6 @@ switch ($choice) {
         $dns1 = "178.22.122.101"
         $dns2 = "185.51.200.1"
         
-        # Detailed help for beginners
         Write-Host ""
         Write-Host "Enter your Shecan DDNS Password Token:"
         Write-Host "Only the token part (not the full URL)"
@@ -50,7 +46,6 @@ switch ($choice) {
         Write-Host ""
         $ddnsPassword = Read-Host "Password Token"
         
-        # Extract token from full URL (error handling)
         if ($ddnsPassword -like "*password=*") {
             $ddnsPassword = $ddnsPassword -replace '.*password=', '' -replace '[^a-zA-Z0-9].*', ''
         }
@@ -66,7 +61,6 @@ switch ($choice) {
     }
 }
 
-# Create the main shecan function
 $command = @'
 function global:shecan {
     param([Parameter(Position=0)][string]$Action)
@@ -108,7 +102,6 @@ function global:shecan {
                 return
             }
 
-            # FLUSH BEFORE - clears stale cache before testing
             Write-Host "Flushing DNS cache before testing..."
             Clear-DnsClientCache
 
@@ -116,7 +109,6 @@ function global:shecan {
             Write-Host "Applying DNS to: $($adapter.Name)"
             Write-Host "Using DNS servers: $currentDns1, $currentDns2"
             
-            # Set DNS servers
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses $currentDns1, $currentDns2
 
             if ($mode -eq "premium") {
@@ -132,7 +124,6 @@ function global:shecan {
                 Write-Host "DDNS auto-updates enabled (every 5 minutes)" -ForegroundColor Green
             }
 
-            # FLUSH AFTER - clears cache from old DNS provider
             Write-Host "Flushing DNS cache after applying..."
             Clear-DnsClientCache
             ipconfig /flushdns | Out-Null
@@ -162,7 +153,6 @@ function global:shecan {
                 Disable-ScheduledTask -TaskName "ShecanDDNS" -ErrorAction SilentlyContinue
             }
 
-            # Reset to DHCP DNS
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ResetServerAddresses
             
             Write-Host "Flushing DNS cache..."
@@ -201,7 +191,6 @@ function global:shecan {
             }
         }
         "test" {
-            # FLUSH BEFORE - ensures clean test environment
             Write-Host "Flushing DNS cache before testing..."
             Clear-DnsClientCache
             
@@ -227,7 +216,6 @@ function global:shecan {
 
 Set-Content -Path "$installPath\shecan.ps1" -Value $command
 
-# Save configuration
 $config = @{
     Mode = $mode
     Dns1 = $dns1
@@ -236,7 +224,6 @@ $config = @{
 }
 $config | ConvertTo-Json | Out-File "$installPath\config.json" -Encoding utf8
 
-# Add to PowerShell profile for permanent availability
 $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
 $profileDir = Split-Path $profilePath
 
