@@ -14,14 +14,16 @@ Cross-platform DNS management script for https://shecan.ir with automatic failov
 ### Linux
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install-linux.sh)"
+sudo bash -c "$(curl -fsSL \
+  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install-linux.sh)"
 ```
 
 
 ### macOS
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install.sh)"
+sudo bash -c "$(curl -fsSL \
+  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install.sh)"
 ```
 
 
