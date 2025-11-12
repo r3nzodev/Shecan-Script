@@ -15,7 +15,7 @@ Cross-platform DNS management script for https://shecan.ir with automatic failov
 
 ```bash
 sudo bash -c "$(curl -fsSL \
-  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install-linux.sh)"
+  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/shecanlinux.sh)"
 ```
 
 
@@ -23,7 +23,7 @@ sudo bash -c "$(curl -fsSL \
 
 ```bash
 sudo bash -c "$(curl -fsSL \
-  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install.sh)"
+  https://raw.githubusercontent.com/r3nzodev/shecan-script/main/shecanmac.sh)"
 ```
 
 
@@ -32,7 +32,7 @@ sudo bash -c "$(curl -fsSL \
 Run PowerShell as Administrator:
 
 ```powershell
-irm https://raw.githubusercontent.com/r3nzodev/shecan-script/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/r3nzodev/shecan-script/main/shecanwin.ps1 | iex
 ```
 
 ## Usage
