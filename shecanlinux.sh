@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Shecan DNS Manager - Universal Linux Setup
 set -e
 
 echo "Shecan DNS Manager - Linux Setup"
@@ -11,7 +10,6 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Detect distro
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     DISTRO="$ID"
@@ -20,7 +18,6 @@ else
     exit 1
 fi
 
-# Check dependencies with distro-specific help
 for cmd in curl nmcli systemctl nslookup; do
     if ! command -v $cmd &>/dev/null; then
         echo "Missing: $cmd"
@@ -53,7 +50,6 @@ if ! systemctl is-active --quiet NetworkManager; then
     exit 1
 fi
 
-# Plan selection
 echo ""
 echo "Select Your Shecan Plan:"
 echo "1) FREE User (178.22.122.100, 185.51.200.2)"
@@ -71,7 +67,6 @@ case $user_choice in
         primary_dns="178.22.122.101"
         secondary_dns="185.51.200.1"
         
-        # Detailed help for beginners
         echo ""
         echo "Enter your Shecan DDNS Password Token:"
         echo "Only the token part (not the full URL)"
@@ -82,7 +77,6 @@ case $user_choice in
         echo ""
         read -p "Password Token: " ddns_password
         
-        # Extract token from full URL if user pasted it (error handling)
         ddns_password=$(echo "$ddns_password" | sed 's|.*password=||' | sed 's|[^a-zA-Z0-9].*||')
         
         if [ -z "$ddns_password" ]; then
@@ -95,7 +89,6 @@ case $user_choice in
         ;;
 esac
 
-# Install command
 echo ""
 echo "Installing shecan command..."
 cat > /usr/local/bin/shecan << 'EOF'
@@ -127,7 +120,6 @@ case "$1" in
     start)
         conn=$(get_conn); [ -z "$conn" ] && echo "No active connection" && exit 1
         
-        # FLUSH BEFORE (new) - clears stale cache before testing
         flush_dns
         
         test_dns; status=$?
@@ -138,7 +130,6 @@ case "$1" in
         nmcli con up "$conn"
         [ "$mode" = "premium" ] && systemctl enable --now shecan-ipupdate.timer 2>/dev/null || true
         
-        # FLUSH AFTER (existing) - clears cache from old DNS
         flush_dns
         
         echo "Shecan DNS activated (Mode: $mode)"
@@ -171,7 +162,6 @@ EOF
 
 chmod +x /usr/local/bin/shecan
 
-# Save config
 mkdir -p /etc/shecan
 cat > /etc/shecan/config << EOF
 mode="$mode"
@@ -180,7 +170,6 @@ secondary_dns="$secondary_dns"
 ddns_password="$ddns_password"
 EOF
 
-# Setup DDNS for premium
 if [ "$mode" = "premium" ]; then
     echo "Setting up DDNS service..."
     
