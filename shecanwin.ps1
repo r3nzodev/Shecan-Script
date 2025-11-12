@@ -41,8 +41,8 @@ switch ($choice) {
         Write-Host "Only the token part (not the full URL)"
         Write-Host ""
         Write-Host "Example:"
-        Write-Host "If your URL is: https://ddns.shecan.ir/update?password=bfdf57e92c9d6"
-        Write-Host "Then enter only: bfdf57e92c9d6"
+        Write-Host "If your URL is: https://ddns.shecan.ir/update?password=bfdf57e82c9d6"
+        Write-Host "Then enter only: bfdf57e82c9d6"
         Write-Host ""
         $ddnsPassword = Read-Host "Password Token"
         
